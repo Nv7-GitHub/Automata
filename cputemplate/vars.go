@@ -2,9 +2,7 @@ package main
 
 import (
 	_ "embed"
-	"image"
 	"image/color"
-	"image/draw"
 
 	r "github.com/lachee/raylib-goplus/raylib"
 )
@@ -32,6 +30,11 @@ var (
 	}
 )
 
-var frame draw.Image
-var rect image.Rectangle
+type Cell struct {
+	Color    r.Color
+	Age      int
+	Strength int
+}
+
+var frame [][]Cell
 var tex r.Texture2D

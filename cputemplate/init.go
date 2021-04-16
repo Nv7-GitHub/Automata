@@ -1,17 +1,17 @@
 package main
 
-import (
-	"image"
-
-	r "github.com/lachee/raylib-goplus/raylib"
-)
-
 func initAutomata() {
+	var w, h int
 	if isHidpi {
-		rect = image.Rect(0, 0, width*2, height*2)
+		w = width * 2
+		h = height * 2
 	} else {
-		image.Rect(0, 0, width, height)
+		w = width
+		h = height
 	}
-	frame = image.NewRGBA(rect)
-	tex = r.LoadTextureFromGo(frame)
+
+	frame = make([][]Cell, h)
+	for i := range frame {
+		frame[i] = make([]Cell, w)
+	}
 }

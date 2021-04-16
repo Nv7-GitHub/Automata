@@ -17,7 +17,7 @@ func main() {
 
 	for !r.WindowShouldClose() {
 		if isHidpi {
-			r.SetMouseScale(1, 1)
+			r.SetMouseScale(2, 2)
 		}
 
 		if frm == fpsim {
@@ -31,17 +31,22 @@ func main() {
 			max := image.Pt(mouseWidth, mouseHeight).Add(min)
 			for y := min.Y; y < max.Y; y++ {
 				for x := min.X; x < max.X; x++ {
-					frame.Set(x, y, mouseColor)
+					if inBounds(x, y) {
+						frame[y][x] = Cell{
+							Color: r.Blue,
+						}
+					}
 				}
 			}
-			simulate()
 		}
 
 		// Draw
 		r.BeginDrawing()
 
 		r.ClearBackground(backgroundColor)
-		r.DrawTexture(tex, 0, 0, r.White)
+
+		r.DrawTextureEx(tex, r.NewVector2(0, 0), 0, 0.5, r.White)
+
 		r.DrawFPS(20, height-40)
 
 		r.EndDrawing()

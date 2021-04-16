@@ -1,18 +1,24 @@
 package main
 
 import (
-	"image/color"
-	"image/draw"
 	"math/rand"
+
+	r "github.com/lachee/raylib-goplus/raylib"
 )
 
-type Automata struct {
-	draw.Image
+func simulatePos(x, y int) {
+	if frame[y][x].Color == r.Blank {
+		return
+	}
+	newX := x + rand.Intn(3) - 1
+	newY := y + rand.Intn(3) - 1
+	for !inBounds(newX, newY) {
+		newX = rand.Intn(3) - 1
+		newY = rand.Intn(3) - 1
+	}
+	out[newY][newX] = frame[y][x]
 }
 
-func (a *Automata) At(x, y int) color.Color {
-	offX := rand.Intn(3) - 1
-	offY := rand.Intn(3) - 1
-	color := a.Image.At(x+offX, y+offY)
-	return color
+func inBounds(x, y int) bool {
+	return x >= 0 && y >= 0 && y < len(frame) && x < len(frame[y])
 }
