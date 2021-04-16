@@ -33,7 +33,7 @@ func main() {
 		r.ClearBackground(r.Blank)
 
 		r.DrawTextureRec(frame.Texture, r.NewRectangle(0, 0, float32(frame.Texture.Width), float32(-frame.Texture.Height)), r.NewVector2(0, 0), r.White)
-		if r.IsMouseButtonPressed(r.MouseLeftButton) {
+		if r.IsMouseButtonDown(r.MouseLeftButton) {
 			pos := r.GetMousePosition()
 			r.DrawRectangle(int(pos.X)-mouseWidth/2, int(pos.Y)-mouseHeight/2, mouseWidth, mouseHeight, r.Blue)
 		}
