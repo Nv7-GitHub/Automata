@@ -3,10 +3,13 @@ package main
 import r "github.com/lachee/raylib-goplus/raylib"
 
 func initAutomata() {
-	if isHidpi {
-		frame = r.LoadRenderTexture(width*2, height*2)
-	} else {
-		frame = r.LoadRenderTexture(width, height)
-	}
+	frame = getRenderTexture()
 	shader = r.LoadShaderCode(vs, fs)
+}
+
+func getRenderTexture() r.RenderTexture2D {
+	if isHidpi {
+		return r.LoadRenderTexture(width*2, height*2)
+	}
+	return r.LoadRenderTexture(width, height)
 }
