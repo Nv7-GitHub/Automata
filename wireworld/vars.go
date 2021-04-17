@@ -20,7 +20,30 @@ const (
 
 var (
 	backgroundColor = r.RayWhite
+
+	conducterColor = r.Gray
+	headColor      = r.Blue
+	tailColor      = r.Red
+	colors         = []Tool{
+		{
+			Name:  "Conducter",
+			Color: conducterColor,
+		},
+		{
+			Name:  "Head",
+			Color: headColor,
+		},
+		{
+			Name:  "Tail",
+			Color: tailColor,
+		},
+	}
 )
+
+type Tool struct {
+	Name  string
+	Color r.Color
+}
 
 //go:embed default.vs
 var vs string

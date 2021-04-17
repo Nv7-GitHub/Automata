@@ -4,23 +4,19 @@ import (
 	r "github.com/lachee/raylib-goplus/raylib"
 )
 
+var colorIndex = 0
+
 func main() {
 	r.InitWindow(width, height, name)
 	r.SetTargetFPS(fps)
 	defer r.UnloadAll()
 	initAutomata()
-
-	time := 0
-	timePos := shader.GetLocation("time")
+	r.SetTraceLogLevel(r.LogDebug | r.LogError | r.LogFatal | r.LogWarning)
 
 	for !r.WindowShouldClose() {
 		if isHidpi {
 			r.SetMouseScale(2, 2)
 		}
-
-		time += 1
-		time = time % 100
-		shader.SetValueFloat32(timePos, []float32{float32(time) / 100}, r.UniformFloat)
 
 		// Basic Drawing
 		r.BeginDrawing()
@@ -33,9 +29,16 @@ func main() {
 		r.ClearBackground(r.Blank)
 
 		r.DrawTextureRec(frame.Texture, r.NewRectangle(0, 0, float32(frame.Texture.Width), float32(-frame.Texture.Height)), r.NewVector2(0, 0), r.White)
+
+		// Input
+		if r.IsKeyPressed(r.KeyRight) && colorIndex < (len(colors)-1) {
+			colorIndex++
+		} else if r.IsKeyPressed(r.KeyLeft) && colorIndex > 0 {
+			colorIndex--
+		}
 		if r.IsMouseButtonDown(r.MouseLeftButton) {
 			pos := r.GetMousePosition()
-			r.DrawRectangle(int(pos.X)-mouseWidth/2, int(pos.Y)-mouseHeight/2, mouseWidth, mouseHeight, r.Blue)
+			r.DrawRectangle(int(pos.X)-mouseWidth/2, int(pos.Y)-mouseHeight/2, mouseWidth, mouseHeight, colors[colorIndex].Color)
 		}
 
 		r.EndShaderMode()
@@ -47,10 +50,13 @@ func main() {
 		// Draw
 		r.ClearBackground(backgroundColor)
 		r.DrawTextureRec(frame.Texture, r.NewRectangle(0, 0, float32(frame.Texture.Width), float32(-frame.Texture.Height)), r.NewVector2(0, 0), r.White)
+		toolName := colors[colorIndex].Name
 		if !isHidpi {
 			r.DrawFPS(20, height-20)
+			r.DrawText(toolName, width-(len(toolName)), 20, 20, colors[colorIndex].Color)
 		} else {
 			r.DrawFPS(20, height*2-40)
+			r.DrawText(toolName, width-(len(toolName)*10), 20, 20, colors[colorIndex].Color)
 		}
 
 		r.EndDrawing()
