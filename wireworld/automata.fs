@@ -34,19 +34,34 @@ float getRand(float off) {
 }
 
 void main()
-{     
-    /*vec4 color = texture(texture0, fragTexCoord);
+{      
+    vec2 size = textureSize(texture0, 0);
+    vec4 color = texture(texture0, fragTexCoord);
     if (color == vec4(0)) {
         finalColor = vec4(0);
     } else if (color == conducterColor) {
         // Conducters
-        finalColor = vec4(0, 1, 1, 1);
+        int nbs = 0;
+        vec4 col;
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                // Neighbors
+                col = texture(texture0, fragTexCoord + (vec2(x, y)/size));
+                if (col == headColor) {
+                    nbs++;
+                }
+            }
+        }
+
+        // Effects of neighbors
+        if (nbs == 1 || nbs == 2) {
+            finalColor = headColor;
+        } else {
+            finalColor = conducterColor;
+        }
     } else if (color == headColor) {
         finalColor = tailColor;
     } else if (color == tailColor) {
         finalColor = conducterColor;
-    } else {
-        finalColor = fragColor;
-    }*/
-    finalColor = texture(texture0, fragTexCoord);
+    }
 }

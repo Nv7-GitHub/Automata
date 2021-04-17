@@ -15,7 +15,8 @@ const (
 	mouseWidth  = 50
 	mouseHeight = 50
 
-	fps = 60
+	fps   = 60
+	fpSim = 1
 )
 
 var (
