@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	"image/color"
 
 	r "github.com/lachee/raylib-goplus/raylib"
 )
@@ -30,14 +29,9 @@ const (
 
 var (
 	backgroundColor = r.RayWhite
-	mouseColor      = color.RGBA{
-		R: 0,
-		G: 200,
-		B: 255,
-		A: 255,
-	}
-	groundColor = r.NewColor(0, 255, 0, 255)
-	waterColor  = r.NewColor(0, 0, 255, 255)
+	colors          = []r.Color{r.Blue, r.Orange, r.Red, r.Purple, r.Pink, r.Green, r.DarkGreen, r.DarkBlue, r.DarkBrown, r.Brown, r.Beige, r.Aqua}
+	groundColor     = r.NewColor(0, 255, 0, 255)
+	waterColor      = r.NewColor(0, 0, 255, 255)
 )
 
 type Cell struct {

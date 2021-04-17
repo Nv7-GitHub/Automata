@@ -24,6 +24,13 @@ func simulatePos(x, y int) {
 		frame[y][x].Color = groundColor
 		return
 	}
+	// Aging speeds up when diseased
+	if frame[y][x].Diseased {
+		frame[y][x].Age = frame[y][x].Age * 3 / 2
+		if rand.Intn(2) == 1 {
+			frame[y][x].Diseased = false // Cured! (50% chance)
+		}
+	}
 
 	// Reproduction
 	if frame[y][x].ReproductionValue > reproductionThreshold {
@@ -77,8 +84,23 @@ func simulatePos(x, y int) {
 			out[y][x].Color = groundColor
 		}
 		out[newY][newX] = frame[y][x]
+	} else if frame[newY][newX].Color != waterColor && frame[newY][newX].Color != frame[y][x].Color {
+		// Fighting
+		me := frame[y][x]
+		enemy := frame[newY][newX]
+		if me.Strength > enemy.Strength {
+			out[newY][newX] = me
+		}
+		out[y][x].Color = groundColor
 	} else {
 		out[y][x] = frame[y][x]
+		if frame[y][x].Diseased && rand.Intn(2) == 1 {
+			if out[newY][newX].Color == r.Blank {
+				out[newY][newX] = frame[newY][newX]
+			}
+			// Disease spreading
+			out[newY][newX].Diseased = true
+		}
 	}
 }
 
