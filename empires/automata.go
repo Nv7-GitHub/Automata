@@ -3,18 +3,22 @@ package main
 import (
 	"math/rand"
 
+	"github.com/Nv7-Github/Automata/util"
+
 	r "github.com/lachee/raylib-goplus/raylib"
 )
 
+var bgen = util.NewBoolgen()
+
 func simulatePos(x, y int) {
-	// Is player?
-	if out[y][x].Color != r.Blank {
+	me := frame[y][x]
+	if ((me.Color == groundColor) || (me.Color == waterColor)) && (out[y][x].Color == r.Blank) {
+		out[y][x] = me
 		return
 	}
 
-	me := frame[y][x]
-	if (me.Color == groundColor) || (me.Color == waterColor) {
-		out[y][x] = me
+	// Is player?
+	if out[y][x].Color != r.Blank {
 		return
 	}
 
@@ -29,7 +33,7 @@ func simulatePos(x, y int) {
 	// Aging speeds up when diseased
 	if me.Diseased {
 		frame[y][x].Age = frame[y][x].Age * 3 / 2
-		if rand.Intn(2) == 1 {
+		if bgen.Bool() {
 			frame[y][x].Diseased = false // Cured! (50% chance)
 		}
 	}
@@ -73,11 +77,11 @@ func simulatePos(x, y int) {
 	}
 
 	// Movement
-	newX := x + rand.Intn(3) - 1
-	newY := y + rand.Intn(3) - 1
+	newX := x + rand3()
+	newY := y + rand3()
 	for !inBounds(newX, newY) {
-		newX = rand.Intn(3) - 1
-		newY = rand.Intn(3) - 1
+		newX = rand3()
+		newY = rand3()
 	}
 	newCell := frame[newY][newX]
 	if newCell.Color == groundColor {
@@ -96,7 +100,7 @@ func simulatePos(x, y int) {
 		out[y][x].Color = groundColor
 	} else {
 		out[y][x] = frame[y][x]
-		if frame[y][x].Diseased && rand.Intn(2) == 1 {
+		if frame[y][x].Diseased && bgen.Bool() {
 			if out[newY][newX].Color == r.Blank {
 				out[newY][newX] = frame[newY][newX]
 			}
@@ -108,4 +112,15 @@ func simulatePos(x, y int) {
 
 func inBounds(x, y int) bool {
 	return x >= 0 && y >= 0 && y < len(frame) && x < len(frame[y])
+}
+
+func rand3() int {
+	return -1 + bool2int(bgen.Bool()) + bool2int(bgen.Bool())
+}
+
+func bool2int(val bool) int {
+	if val {
+		return 1
+	}
+	return 0
 }
